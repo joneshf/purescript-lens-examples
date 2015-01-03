@@ -97,13 +97,13 @@
 
 ### Values
 
-    _Address :: LensP _ _
+    _Address :: LensP Address { state :: State, city :: String, street :: StreetRec }
 
-    _Person :: LensP _ _
+    _Person :: LensP Person { address :: Address, lastName :: String, firstName :: String }
 
     _StreetRec :: LensP _ _
 
-    address :: LensP _ _
+    address :: forall r. LensP { address :: Address | r } Address
 
     changeFirstName :: String -> Person -> Person
 
@@ -121,7 +121,7 @@
 
     designation :: LensP _ _
 
-    firstName :: LensP _ _
+    firstName :: forall r. LensP { firstName :: String | r } String
 
     fullName :: Getter Person String
 

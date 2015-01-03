@@ -216,22 +216,22 @@ module Examples.Optic.Records where
 
   -- Lenses
 
-  _Person :: LensP _ _
+  _Person :: LensP Person { firstName :: String, lastName :: String, address :: Address}
   _Person f (Person b) = Person <$> f b
 
-  _Address :: LensP _ _
+  _Address :: LensP Address {street :: StreetRec, city :: String, state :: State}
   _Address f (Address b) = Address <$> f b
 
   _StreetRec :: LensP _ _
   _StreetRec f (StreetRec b) = StreetRec <$> f b
 
-  firstName :: LensP _ _
+  firstName :: forall r. LensP {firstName :: String | r} String
   firstName f o = f o.firstName <#> \firstName' -> o{firstName = firstName'}
 
   lastName :: LensP _ _
   lastName f o = f o.lastName <#> \lastName' -> o{lastName = lastName'}
 
-  address :: LensP _ _
+  address :: forall r. LensP {address :: Address | r} Address
   address f o = f o.address <#> \address' -> o{address = address'}
 
   street :: LensP _ _
