@@ -101,9 +101,9 @@
 
     _Person :: LensP Person { address :: Address, lastName :: String, firstName :: String }
 
-    _StreetRec :: LensP _ _
+    _StreetRec :: LensP StreetRec { designation :: Designation, streetName :: String, number :: Number }
 
-    address :: forall r. LensP { address :: Address | r } Address
+    address :: forall b a r. Lens { address :: a | r } { address :: b | r } a b
 
     changeFirstName :: String -> Person -> Person
 
@@ -117,25 +117,33 @@
 
     changeStreetNumberLens :: Number -> Person -> Person
 
-    city :: LensP _ _
+    city :: forall b a r. Lens { city :: a | r } { city :: b | r } a b
 
-    designation :: LensP _ _
+    designation :: forall b a r. Lens { designation :: a | r } { designation :: b | r } a b
 
-    firstName :: forall r. LensP { firstName :: String | r } String
+    firstName :: forall b a r. Lens { firstName :: a | r } { firstName :: b | r } a b
+
+    foo :: String
 
     fullName :: Getter Person String
 
     johnDoe :: Person
 
-    lastName :: LensP _ _
+    lastName :: forall b a r. Lens { lastName :: a | r } { lastName :: b | r } a b
 
-    number :: LensP _ _
+    number :: forall b a r. Lens { number :: a | r } { number :: b | r } a b
 
-    state :: LensP _ _
+    prettyStreet :: Getter Person String
 
-    street :: LensP _ _
+    setFirstName :: SetterP Person String
 
-    streetName :: LensP _ _
+    state :: forall b a r. Lens { state :: a | r } { state :: b | r } a b
+
+    street :: forall b a r. Lens { street :: a | r } { street :: b | r } a b
+
+    streetName :: forall b a r. Lens { streetName :: a | r } { streetName :: b | r } a b
+
+    watDoe :: Person
 
 
 ## Module Examples.Optic.Bounded
