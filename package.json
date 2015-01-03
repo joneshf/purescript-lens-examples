@@ -1,0 +1,10 @@
+{
+  "name": "purescript-lens-examples",
+  "version": "0.0.0",
+  "description": "",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-purescript": "^0.1.2"
+  }
+}
