@@ -3,6 +3,8 @@ module Examples.Optic.Bounded where
   {-
       This module provides an example of using lenses to enforce an invariant.
       i.e. a ball can never be outside of some box.
+      N.B. These lenses are unlawful.
+      In particular `view l (set l a b) = a` does not hold.
   -}
 
   import Optic.Core
