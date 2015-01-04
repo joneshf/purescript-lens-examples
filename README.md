@@ -1,75 +1,37 @@
 # Module Documentation
 
-## Module Examples.Optic.Records.Types
+## Module Examples.Optic.Bounded
 
 ### Types
 
-    data Designation where
-      Avenue :: Designation
-      Boulevard :: Designation
-      Circle :: Designation
-      Drive :: Designation
-      Street :: Designation
-      Way :: Designation
+    newtype Ball where
+      Ball :: { y :: Number, x :: Number } -> Ball
 
-    data State where
-      AL :: State
-      AK :: State
-      AZ :: State
-      AR :: State
-      CA :: State
-      CO :: State
-      CT :: State
-      DE :: State
-      FL :: State
-      GA :: State
-      HI :: State
-      ID :: State
-      IL :: State
-      IN :: State
-      IA :: State
-      KS :: State
-      KY :: State
-      LA :: State
-      ME :: State
-      MD :: State
-      MA :: State
-      MI :: State
-      MN :: State
-      MS :: State
-      MO :: State
-      MT :: State
-      NE :: State
-      NV :: State
-      NH :: State
-      NJ :: State
-      NM :: State
-      NY :: State
-      NC :: State
-      ND :: State
-      OH :: State
-      OK :: State
-      OR :: State
-      PA :: State
-      RI :: State
-      SC :: State
-      SD :: State
-      TN :: State
-      TX :: State
-      UT :: State
-      VT :: State
-      VA :: State
-      WA :: State
-      WV :: State
-      WI :: State
-      WY :: State
+    type LowerBound = Number
+
+    type UpperBound = Number
 
 
 ### Type Class Instances
 
-    instance showDesignation :: Show Designation
+    instance showBall :: Show Ball
 
-    instance showState :: Show State
+
+### Values
+
+    _Ball :: LensP Ball { y :: Number, x :: Number }
+
+    clamp :: LowerBound -> UpperBound -> Number -> Number
+
+    moveEast10 :: Ball -> Ball
+
+    moveNorthEast130 :: Ball -> Ball
+
+    moveSouth30 :: Ball -> Ball
+
+    x :: forall r. LensP { x :: Number | r } Number
+
+    y :: forall r. LensP { y :: Number | r } Number
 
 
 ## Module Examples.Optic.Records
@@ -146,38 +108,13 @@
     watDoe :: Person
 
 
-## Module Examples.Optic.Bounded
-
-### Types
-
-    newtype Ball where
-      Ball :: { y :: Number, x :: Number } -> Ball
-
-    type LowerBound = Number
-
-    type UpperBound = Number
-
-
-### Type Class Instances
-
-    instance showBall :: Show Ball
-
+## Module Examples.Optic.Traversal
 
 ### Values
 
-    _Ball :: LensP Ball { y :: Number, x :: Number }
+    foo :: [Tuple (Either Number (Maybe String)) (Maybe Boolean)]
 
-    clamp :: LowerBound -> UpperBound -> Number -> Number
-
-    moveEast10 :: Ball -> Ball
-
-    moveNorthEast130 :: Ball -> Ball
-
-    moveSouth30 :: Ball -> Ball
-
-    x :: forall r. LensP { x :: Number | r } Number
-
-    y :: forall r. LensP { y :: Number | r } Number
+    wat :: Tuple (Either Number (Maybe String)) (Maybe Boolean)
 
 
 ## Module Examples.Optic.Virtual
@@ -224,13 +161,76 @@
     unitLen :: Length
 
 
-## Module Examples.Optic.Traversal
+## Module Examples.Optic.Records.Types
 
-### Values
+### Types
 
-    foo :: [Tuple (Either Number (Maybe String)) (Maybe Boolean)]
+    data Designation where
+      Avenue :: Designation
+      Boulevard :: Designation
+      Circle :: Designation
+      Drive :: Designation
+      Street :: Designation
+      Way :: Designation
 
-    wat :: Tuple (Either Number (Maybe String)) (Maybe Boolean)
+    data State where
+      AL :: State
+      AK :: State
+      AZ :: State
+      AR :: State
+      CA :: State
+      CO :: State
+      CT :: State
+      DE :: State
+      FL :: State
+      GA :: State
+      HI :: State
+      ID :: State
+      IL :: State
+      IN :: State
+      IA :: State
+      KS :: State
+      KY :: State
+      LA :: State
+      ME :: State
+      MD :: State
+      MA :: State
+      MI :: State
+      MN :: State
+      MS :: State
+      MO :: State
+      MT :: State
+      NE :: State
+      NV :: State
+      NH :: State
+      NJ :: State
+      NM :: State
+      NY :: State
+      NC :: State
+      ND :: State
+      OH :: State
+      OK :: State
+      OR :: State
+      PA :: State
+      RI :: State
+      SC :: State
+      SD :: State
+      TN :: State
+      TX :: State
+      UT :: State
+      VT :: State
+      VA :: State
+      WA :: State
+      WV :: State
+      WI :: State
+      WY :: State
+
+
+### Type Class Instances
+
+    instance showDesignation :: Show Designation
+
+    instance showState :: Show State
 
 
 
