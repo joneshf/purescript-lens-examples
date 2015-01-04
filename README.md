@@ -165,13 +165,19 @@
 
 ### Values
 
-    _Ball :: LensP _ _
+    _Ball :: LensP Ball { y :: Number, x :: Number }
 
     clamp :: LowerBound -> UpperBound -> Number -> Number
 
-    x :: LensP _ _
+    moveEast10 :: Ball -> Ball
 
-    y :: LensP _ _
+    moveNorthEast130 :: Ball -> Ball
+
+    moveSouth30 :: Ball -> Ball
+
+    x :: forall r. LensP { x :: Number | r } Number
+
+    y :: forall r. LensP { y :: Number | r } Number
 
 
 ## Module Examples.Optic.Virtual
@@ -212,6 +218,10 @@
     mm :: LensP Length MM
 
     tenmm :: Length
+
+    threeInches :: Length
+
+    unitLen :: Length
 
 
 ## Module Examples.Optic.Traversal

@@ -120,6 +120,11 @@ module Examples.Optic.Records.Types where
 
 module Examples.Optic.Records where
 
+  {-
+      This module provides the canonical use of lenses,
+      i.e. nested data structures.
+  -}
+
   import Data.String (joinWith)
 
   import Examples.Optic.Records.Types
@@ -311,7 +316,13 @@ module Examples.Optic.Records where
 
 module Examples.Optic.Bounded where
 
+  {-
+      This module provides an example of using lenses to enforce an invariant.
+      i.e. a ball can never be outside of some box.
+  -}
+
   import Optic.Core
+  import Optic.Extended
 
   newtype Ball = Ball
     { x :: Number
@@ -332,18 +343,42 @@ module Examples.Optic.Bounded where
   clamp :: LowerBound -> UpperBound -> Number -> Number
   clamp low high n = if n < low then low else if n > high then high else n
 
-  _Ball :: LensP _ _
+  _Ball :: LensP Ball {x :: Number, y :: Number}
   _Ball f (Ball b) = Ball <$> f b
 
-  x :: LensP _ _
+  -- We specify the invariants here.
+  -- So long as you only use these lenses to get or set values,
+  -- you are guaranteed to have a value within the range.
+
+  -- The x value can never be "lensed" out of [minX, maxX]
+  x :: forall r. LensP {x :: Number | r} Number
   x f o = f o.x <#> \x' -> o{x = clamp minX maxX x'}
 
-  y :: LensP _ _
+  -- The y value can never be "lensed" out of [minY, maxY]
+  y :: forall r. LensP {y :: Number | r} Number
   y f o = f o.y <#> \y' -> o{y = clamp minY maxY y'}
 
   ball = Ball {x: 50, y: 50}
 
+  moveEast10 :: Ball -> Ball
+  moveEast10 b = b # _Ball..x +~ 10
+
+  moveSouth30 :: Ball -> Ball
+  moveSouth30 b = b # _Ball..y -~ 30
+
+  moveNorthEast130 :: Ball -> Ball
+  moveNorthEast130 b = b #~ do
+    _Ball..x -= 50
+    _Ball..y += 120
+
 module Examples.Optic.Virtual where
+
+  {-
+      This module provides an example of virtual fields.
+      i.e. We could document `Length` as having a field for each unit.
+  -}
+
+  import Data.Function (on)
 
   import Optic.Core
 
@@ -358,12 +393,10 @@ module Examples.Optic.Virtual where
   instance showLength :: Show Length where
     show (Length n) = "Length (" ++ show n ++ ")"
 
-  tenmm :: Length
-  tenmm = Length 10
-
   _Length :: LensP _ _
   _Length f (Length n) = Length <$> f n
 
+  -- Provide ways of viewing the length as `MM`, `CM`, `M`, etc.
   mm :: LensP Length MM
   mm f (Length n) = f n <#> \n' -> Length n'
 
@@ -379,7 +412,20 @@ module Examples.Optic.Virtual where
   feet :: LensP Length Ft
   feet f (Length n) = f (n / 304.8) <#> \n' -> Length (n' * 304.8)
 
+  unitLen :: Length
+  unitLen = Length 1
+
+  tenmm :: Length
+  tenmm = Length 10
+
+  threeInches :: Length
+  threeInches = unitLen # inches .~ 3
+
 module Examples.Optic.Traversal where
+
+  {-
+      This module provides examples of traversals and prisms.
+  -}
 
   import Data.Either (Either(..))
   import Data.Maybe (Maybe(..))
@@ -392,6 +438,7 @@ module Examples.Optic.Traversal where
   import Optic.Refractor.Lens
   import Optic.Refractor.Prism
 
+  -- This is intentionally a messy structure.
   foo :: [Tuple (Either Number (Maybe String)) (Maybe Boolean)]
   foo =
     [ Tuple (Left 1) Nothing
@@ -401,12 +448,20 @@ module Examples.Optic.Traversal where
     , Tuple (Right Nothing) Nothing
     ]
 
+  -- We tack on " wat" to all the justs in the rights.
   bar = foo # mapped.._1.._Right.._Just ++~ " wat"
+  -- We multiply all Lefts by 5.
   baz = foo # mapped.._1.._Left *~ 5
+  -- We convert all of the `Maybe Boolean` to `Maybe String`.
   quux = foo # mapped.._2.._Just %~ (\b -> if b then "yes" else "nope")
+  -- We get the length of the strings in each just in the rights.
   wibble = foo # mapped.._1.._Right.._Just %~ length
+  -- We attempt (successfully) to set index 1 of `foo` to `wat`
   wobble = foo # ix 1 .~ wat
+  -- We attempt (unsuccessfully) to set index 100 of `foo` to `wat`
+  -- N.B. This is a safe runtime index.
   wubble = foo # ix 100 .~ wat
 
+  -- We need to specify a type signature, otherwise the compiler complains.
   wat :: Tuple (Either Number (Maybe String)) (Maybe Boolean)
   wat = Tuple (Left 12) (Nothing)
