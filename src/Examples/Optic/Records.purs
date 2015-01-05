@@ -88,6 +88,13 @@ module Examples.Optic.Records where
       addr = runAddress p.address
       strt = runStreetRec addr.street
 
+  {-
+  -- Same as above, but without using a `where` clause.
+  changeStreetNumber :: Number -> Person -> Person
+  changeStreetNumber newNumber (Person p) =
+    Person p{address = Address (runAddress p.address){street = StreetRec (runStreetRec (runAddress p.address).street){number = newNumber}}}
+  -}
+
   -- Updating fields with lenses.
 
   -- Seems a bit much for just one layer of nesting.
